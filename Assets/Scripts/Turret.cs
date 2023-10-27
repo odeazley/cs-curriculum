@@ -1,39 +1,70 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Net.Mail;
 using Unity.VisualScripting;
-using UnityEditor.Tilemaps;
 using UnityEngine;
 
 public class Turret : MonoBehaviour
 {
-    public GameObject vector3;
-    Transform last;
-    private float time = 0;
-    private float timermax = 2;
-    [SerializeField] private GameObject projectile;
+    public Transform firePoint;
+    public GameObject turretProjectile;
+    public bool isInRange;
+    public float initialTime;
+    public Transform target;
+    public float timer;
+
+    
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        last.position = GlobalMessageListener.transform.position;
+        
+        initialTime = 3;
+        timer = initialTime;
+    }
+    void OnTriggerStay2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isInRange = true;
+        }
+    }
+    void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            isInRange = false;
+        }
     }
 
-    // Update is called once per frame
     void Update()
     {
-        if (time >= 0)
+        if (timer > 0)
         {
-            time -= Time.deltaTime;
+            timer -= Time.deltaTime;
         }
-        
+        else
+        {
+            if (isInRange)
+            {
+                fire();
+            }
+        }
     }
 
-    void OnTriggerEnter(Collider2D other)
+    void fire()
     {
-        if (other.CompareTag("Player") & time <= 0)
-        {
-            target = other.gameObject.transform.position;
-            Instantiate(projectile.transform);
-            time = timermax;
-        }
+            
+        Instantiate(turretProjectile, firePoint.position, firePoint.rotation);
+
+        Debug.Log("fire");
+
+        timer=initialTime;
     }
+    
 }

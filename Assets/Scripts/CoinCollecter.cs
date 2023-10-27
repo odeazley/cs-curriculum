@@ -19,6 +19,7 @@ public class CollectCoins : MonoBehaviour
         {
             hud.coins ++;
             other.gameObject.SetActive(false);
+            gameObject destory(other);
         }
     }
 }
