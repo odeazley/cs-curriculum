@@ -24,7 +24,7 @@ public class Turret : MonoBehaviour
     private void Start()
     {
         
-        initialTime = 3;
+        initialTime = 3f;
         timer = initialTime;
     }
     void OnTriggerStay2D(Collider2D other)
